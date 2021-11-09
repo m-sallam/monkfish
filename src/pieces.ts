@@ -46,6 +46,10 @@ export const pieceLettersToValueMap: Record<string, Piece> = {
   K: WHITE_KING,
 };
 
+export const pieceValueToLetterMap = Object.fromEntries(
+  Object.entries(pieceLettersToValueMap).map(([key, value]) => [value, key]),
+);
+
 export const isWhitePiece = (piece: Piece | Empty): piece is WhitePiece =>
   piece > 0;
 export const isBlackPiece = (piece: Piece | Empty): piece is BlackPiece =>

@@ -1,4 +1,4 @@
-import { fenToBoard } from "../src/fen.ts";
+import { boardToFen, fenToBoard } from "../src/fen.ts";
 import { getEmptyBoard } from "../src/board.ts";
 import { assertEquals, assertThrows } from "../dev_deps.ts";
 import { FenParseError } from "../src/error.ts";
@@ -70,6 +70,32 @@ const fenToBoardCases = [
   },
 ];
 
+const boardToFenCases = [
+  {
+    name: "default position",
+    positionPart: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR",
+    board: getEmptyBoard()
+      .fill(-1, 48, 56)
+      .fill(-4, 56, 57)
+      .fill(-2, 57, 58)
+      .fill(-3, 58, 59)
+      .fill(-5, 59, 60)
+      .fill(-6, 60, 61)
+      .fill(-3, 61, 62)
+      .fill(-2, 62, 63)
+      .fill(-4, 63)
+      .fill(1, 8, 16)
+      .fill(4, 7, 8)
+      .fill(2, 6, 7)
+      .fill(3, 5, 6)
+      .fill(5, 3, 4)
+      .fill(6, 4, 5)
+      .fill(3, 2, 3)
+      .fill(2, 1, 2)
+      .fill(4, 0, 1),
+  },
+];
+
 fenToBoardCases.forEach(({ name, positionPart, board, error }) => {
   Deno.test({
     name: `fenToBoard: ${name}`,
@@ -82,6 +108,17 @@ fenToBoardCases.forEach(({ name, positionPart, board, error }) => {
           FenParseError,
           "invalid position part",
         );
+      }
+    },
+  });
+});
+
+boardToFenCases.forEach(({ name, positionPart, board }) => {
+  Deno.test({
+    name: `boardToFen: ${name}`,
+    fn: () => {
+      if (positionPart) {
+        assertEquals(positionPart, boardToFen(board));
       }
     },
   });

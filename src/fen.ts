@@ -1,6 +1,10 @@
-import { getEmptyBoard } from "./board.ts";
+import { Board, getEmptyBoard } from "./board.ts";
 import { FenParseError } from "./error.ts";
-import { pieceLettersToValueMap } from "./pieces.ts";
+import {
+  EMPTY,
+  pieceLettersToValueMap,
+  pieceValueToLetterMap,
+} from "./pieces.ts";
 
 export const fenToBoard = (fenPositionPart: string) => {
   const board = getEmptyBoard();
@@ -65,4 +69,31 @@ export const fenToBoard = (fenPositionPart: string) => {
   });
 
   return board;
+};
+
+export const boardToFen = (board: Board) => {
+  const ranks = [];
+
+  for (let square = 0; square < 64; square += 8) {
+    const rank = board.slice(square, square + 8);
+
+    let rankInLetters = "";
+    let emptyCount = 0;
+
+    rank.forEach((file, fileIndex) => {
+      if (file === EMPTY) emptyCount += 1;
+      else {
+        rankInLetters += `${emptyCount || ""}${
+          pieceValueToLetterMap[board[square + fileIndex]]
+        }`;
+        emptyCount = 0;
+      }
+    });
+
+    if (emptyCount) rankInLetters += emptyCount;
+
+    ranks.push(rankInLetters);
+  }
+
+  return ranks.reverse().join("/");
 };
