@@ -7,3 +7,6 @@ export const isSquareOnRank = (square: Square, rank: Rank) =>
 
 export const isSquareOnFile = (square: Square, file: File) =>
   square % 8 === file;
+
+export const isValidSquare = (square: number): square is Square =>
+  square >= 0 && square <= 63;

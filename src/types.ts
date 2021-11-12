@@ -1,3 +1,14 @@
+import {
+  BLACK_BISHOP,
+  BLACK_KNIGHT,
+  BLACK_QUEEN,
+  BLACK_ROOK,
+  WHITE_BISHOP,
+  WHITE_KNIGHT,
+  WHITE_QUEEN,
+  WHITE_ROOK,
+} from "./pieces/utils.ts";
+
 export type Color = "w" | "b";
 
 export type Square =
@@ -67,7 +78,16 @@ export type Square =
 
 export type Castling = "k" | "q" | "K" | "Q" | null;
 
-export type Promotion = "Q" | "N" | "R" | "B" | null;
+export type Promotion =
+  | typeof BLACK_QUEEN
+  | typeof WHITE_QUEEN
+  | typeof BLACK_KNIGHT
+  | typeof WHITE_KNIGHT
+  | typeof BLACK_ROOK
+  | typeof WHITE_ROOK
+  | typeof BLACK_BISHOP
+  | typeof WHITE_BISHOP
+  | null;
 
 export type File = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 

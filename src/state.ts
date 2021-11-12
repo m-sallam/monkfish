@@ -2,9 +2,11 @@ import {
   Board,
   getDefaultBlackPositions,
   getDefaultWhitePositions,
-  getEmptyBoard,
+  populateColorsPositions,
 } from "./board.ts";
-import { Color, EnPassant } from "./types.ts";
+import { fenToBoard } from "./fen.ts";
+import { BLACK_KING, WHITE_KING } from "./pieces/utils.ts";
+import { Color, EnPassant, Square } from "./types.ts";
 
 export interface State {
   board: Board;
@@ -21,13 +23,13 @@ export interface State {
 
   nonTakeMoveCount: number;
 
-  kingPosition: [number, number];
+  kingPosition: [Square, Square];
 
   enPassant: EnPassant;
 }
 
 export const getEmptyState = (): State => ({
-  board: getEmptyBoard(),
+  board: fenToBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"),
   sideToMove: "w",
   whitePositions: getDefaultWhitePositions(),
   blackPositions: getDefaultBlackPositions(),
@@ -46,6 +48,21 @@ export const copyState = (state: State): State => ({
   halfMoveCount: state.halfMoveCount,
   moveCount: state.moveCount,
   nonTakeMoveCount: state.nonTakeMoveCount,
-  kingPosition: [state.kingPosition[0], state.blackPositions[1]],
+  kingPosition: [state.kingPosition[0], state.kingPosition[1]],
   enPassant: state.enPassant,
 });
+
+export const fenToState = (fen: string): State => {
+  const board = fenToBoard(fen);
+  const { blackPositions, whitePositions } = populateColorsPositions(board);
+  return {
+    ...getEmptyState(),
+    board,
+    blackPositions,
+    whitePositions,
+    kingPosition: [
+      board.findIndex((piece) => piece === WHITE_KING) as Square,
+      board.findIndex((piece) => piece === BLACK_KING) as Square,
+    ],
+  };
+};

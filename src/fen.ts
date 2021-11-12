@@ -4,7 +4,7 @@ import {
   EMPTY,
   pieceLettersToValueMap,
   pieceValueToLetterMap,
-} from "./pieces.ts";
+} from "./pieces/utils.ts";
 
 export const fenToBoard = (fenPositionPart: string) => {
   const board = getEmptyBoard();

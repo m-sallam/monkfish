@@ -4,7 +4,7 @@ import {
   Piece,
   WHITE_KING,
   WHITE_PAWN,
-} from "./pieces.ts";
+} from "./pieces/utils.ts";
 import { State } from "./state.ts";
 import { Castling, EnPassant, Promotion, Square } from "./types.ts";
 import { isSquareOnRank } from "./utils.ts";
@@ -21,12 +21,23 @@ export interface Move {
   promotion: Promotion;
 }
 
+export enum Direction {
+  TOP = "TOP",
+  BOTTOM = "BOTTOM",
+  RIGHT = "RIGHT",
+  LEFT = "LEFT",
+  TOP_RIGHT = "TOP_RIGHT",
+  TOP_LEFT = "TOP_LEFT",
+  BOTTOM_RIGHT = "BOTTOM_RIGHT",
+  BOTTOM_LEFT = "BOTTOM_LEFT",
+}
+
 export const applyMove = (state: State, move: Move) => {
   state.board[move.from] = 0;
-  state.board[move.to] = move.piece;
+  state.board[move.to] = move.promotion ?? move.piece;
 
   if (move.to === state.enPassant) {
-    if (move.to === WHITE_PAWN) {
+    if (move.piece === WHITE_PAWN) {
       state.board[state.enPassant - 8] = 0;
       state.blackPositions[state.enPassant - 8] = 0;
     } else if (move.piece === BLACK_PAWN) {
@@ -37,11 +48,11 @@ export const applyMove = (state: State, move: Move) => {
 
   if (state.sideToMove === "w") {
     state.whitePositions[move.from] = 0;
-    state.whitePositions[move.to] = move.piece;
+    state.whitePositions[move.to] = move.promotion ?? move.piece;
     state.blackPositions[move.to] = 0;
   } else {
     state.blackPositions[move.from] = 0;
-    state.blackPositions[move.to] = move.piece;
+    state.blackPositions[move.to] = move.promotion ?? move.piece;
     state.whitePositions[move.to] = 0;
   }
 

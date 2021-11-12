@@ -5,7 +5,7 @@ import {
   isWhitePiece,
   Piece,
   WhitePiece,
-} from "./pieces.ts";
+} from "./pieces/utils.ts";
 
 export type Board = Array<Piece | Empty>;
 export type WhitePositions = Array<WhitePiece | Empty>;

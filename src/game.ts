@@ -5,7 +5,7 @@ import {
   applyNonTakeMoveCount,
   Move,
 } from "./move.ts";
-import { copyState, getEmptyState, State } from "./state.ts";
+import { copyState, fenToState, getEmptyState, State } from "./state.ts";
 import { oppositeColor } from "./utils.ts";
 
 export class Game {
@@ -19,6 +19,10 @@ export class Game {
 
   #save() {
     this.#history.push(copyState(this.state));
+  }
+
+  load(fen: string) {
+    this.state = fenToState(fen);
   }
 
   move(move: Move) {
