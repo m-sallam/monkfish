@@ -242,6 +242,7 @@ export const getPawnMovesForWhite = (state: State, from: Square) => {
 };
 
 export const getPawnAttacksForBlack = (
+  // deno-lint-ignore no-unused-vars
   state: State,
   from: Square,
   attackedSquare?: Square,
@@ -250,12 +251,8 @@ export const getPawnAttacksForBlack = (
 
   if (!isSquareOnFile(from, 0)) {
     const rightAttackMove = from - 9;
-    const pieceOnPosition = state.board[rightAttackMove];
 
-    if (
-      isValidSquare(rightAttackMove) &&
-      (pieceOnPosition > 0 || rightAttackMove === state.enPassant)
-    ) {
+    if (isValidSquare(rightAttackMove)) {
       if (typeof attackedSquare === "number") {
         if (attackedSquare === rightAttackMove) {
           moves.push({
@@ -280,12 +277,8 @@ export const getPawnAttacksForBlack = (
 
   if (!isSquareOnFile(from, 7)) {
     const leftAttackMove = from - 7;
-    const pieceOnPosition = state.board[leftAttackMove];
 
-    if (
-      isValidSquare(leftAttackMove) &&
-      (pieceOnPosition > 0 || leftAttackMove === state.enPassant)
-    ) {
+    if (isValidSquare(leftAttackMove)) {
       if (typeof attackedSquare === "number") {
         if (attackedSquare === leftAttackMove) {
           moves.push({
@@ -312,6 +305,7 @@ export const getPawnAttacksForBlack = (
 };
 
 export const getPawnAttacksForWhite = (
+  // deno-lint-ignore no-unused-vars
   state: State,
   from: Square,
   attackedSquare?: Square,
@@ -320,12 +314,8 @@ export const getPawnAttacksForWhite = (
 
   if (!isSquareOnFile(from, 0)) {
     const leftAttackMove = from + 7;
-    const pieceOnPosition = state.board[leftAttackMove];
 
-    if (
-      isValidSquare(leftAttackMove) &&
-      (pieceOnPosition < 0 || leftAttackMove === state.enPassant)
-    ) {
+    if (isValidSquare(leftAttackMove)) {
       if (typeof attackedSquare === "number") {
         if (attackedSquare === leftAttackMove) {
           moves.push({
@@ -350,12 +340,8 @@ export const getPawnAttacksForWhite = (
 
   if (!isSquareOnFile(from, 7)) {
     const rightAttackMove = from + 9;
-    const pieceOnPosition = state.board[rightAttackMove];
 
-    if (
-      isValidSquare(rightAttackMove) &&
-      (pieceOnPosition < 0 || rightAttackMove === state.enPassant)
-    ) {
+    if (isValidSquare(rightAttackMove)) {
       if (typeof attackedSquare === "number") {
         if (attackedSquare === rightAttackMove) {
           moves.push({

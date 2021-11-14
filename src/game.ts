@@ -32,9 +32,9 @@ export class Game {
 
     applyHalfMoveCount(this.state, move);
     applyMoveCount(this.state);
+    updateCastling(this.state, move);
     applyMove(this.state, move);
     applyEnPassant(this.state, move);
-    updateCastling(this.state, move);
 
     this.state.sideToMove = oppositeColor(this.state.sideToMove);
   }

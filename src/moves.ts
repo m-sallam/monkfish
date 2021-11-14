@@ -18,11 +18,7 @@ import {
   getBishopPossibleAttacks,
   getBishopPossibleMoves,
 } from "./pieces/bishop.ts";
-import {
-  cast,
-  getKingPossibleAttacks,
-  getKingPossibleMoves,
-} from "./pieces/king.ts";
+import { getKingPossibleAttacks, getKingPossibleMoves } from "./pieces/king.ts";
 import {
   getKnightPossibleAttacks,
   getKnightPossibleMoves,
@@ -32,7 +28,6 @@ import {
   getPawnAttacksForWhite,
   getPawnMovesForBlack,
   getPawnMovesForWhite,
-  promotions,
 } from "./pieces/pawn.ts";
 import {
   getQueenPossibleAttacks,
@@ -128,10 +123,8 @@ export const isInCheckAfterMove = (
   return attacked;
 };
 
-let allMoves: Move[] = [];
 export const possibleMovesForDepth = (game: Game, depth = 1): number => {
   const moves = possibleMoves(game);
-  allMoves = allMoves.concat(moves);
   if (depth === 1) return moves.length;
 
   const innerMoves = moves.reduce((acc, move) => {
@@ -142,12 +135,3 @@ export const possibleMovesForDepth = (game: Game, depth = 1): number => {
   }, 0);
   return innerMoves;
 };
-
-const game = new Game();
-game.load(
-  "r3k2r/1b4bq/8/8/8/8/7B/R3K2R w KQkq - 0 1",
-);
-console.time("moves");
-console.log(possibleMovesForDepth(game, 4));
-console.timeEnd("moves");
-console.log("ff", allMoves.filter((m) => !!m.castling).length);

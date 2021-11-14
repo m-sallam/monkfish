@@ -156,4 +156,12 @@ export const updateCastling = (state: State, move: Move) => {
     if (move.from === 56) removeCastling(["q"]);
     if (move.from === 63) removeCastling(["k"]);
   }
+  if (state.board[move.to] === WHITE_ROOK) {
+    if (move.to === 0) removeCastling(["Q"]);
+    if (move.to === 7) removeCastling(["K"]);
+  }
+  if (state.board[move.to] === BLACK_ROOK) {
+    if (move.to === 56) removeCastling(["q"]);
+    if (move.to === 63) removeCastling(["k"]);
+  }
 };
