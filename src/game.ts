@@ -1,12 +1,14 @@
+import { fenToState } from "./fen.ts";
 import {
   applyEnPassant,
+  applyHalfMoveCount,
   applyMove,
   applyMoveCount,
-  applyNonTakeMoveCount,
   Move,
+  updateCastling,
 } from "./move.ts";
-import { copyState, fenToState, getEmptyState, State } from "./state.ts";
-import { oppositeColor } from "./utils.ts";
+import { copyState, State } from "./state.ts";
+import { defaultFen, oppositeColor } from "./utils.ts";
 
 export class Game {
   state: State;
@@ -14,7 +16,7 @@ export class Game {
   #history: State[] = [];
 
   constructor() {
-    this.state = getEmptyState();
+    this.state = fenToState(defaultFen);
   }
 
   #save() {
@@ -28,10 +30,11 @@ export class Game {
   move(move: Move) {
     this.#save();
 
-    applyNonTakeMoveCount(this.state, move);
+    applyHalfMoveCount(this.state, move);
     applyMoveCount(this.state);
     applyMove(this.state, move);
     applyEnPassant(this.state, move);
+    updateCastling(this.state, move);
 
     this.state.sideToMove = oppositeColor(this.state.sideToMove);
   }

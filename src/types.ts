@@ -76,7 +76,11 @@ export type Square =
   | 62
   | 63;
 
-export type Castling = "k" | "q" | "K" | "Q" | null;
+export type Castling =
+  | null
+  | Exclude<`${"K" | ""}${"Q" | ""}${"k" | ""}${"q" | ""}`, "">;
+
+export type MoveCastling = "K" | "Q" | null;
 
 export type Promotion =
   | typeof BLACK_QUEEN
@@ -90,7 +94,11 @@ export type Promotion =
   | null;
 
 export type File = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type FileNotation = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h";
 
 export type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type RankNotation = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8";
+
+export type BoardPositionNotation = `${FileNotation}${RankNotation}`;
 
 export type EnPassant = Square | null;

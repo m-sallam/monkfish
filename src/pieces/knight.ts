@@ -134,7 +134,7 @@ export const getKnightPossibleAttacks = (
     const oneOClock = from + 17;
     const fiveOClock = from - 15;
     if (isValidSquare(oneOClock)) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === oneOClock) {
           moves.push({
             piece,
@@ -155,7 +155,7 @@ export const getKnightPossibleAttacks = (
       }
     }
     if (isValidSquare(fiveOClock)) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === fiveOClock) {
           moves.push({
             piece,
@@ -182,7 +182,7 @@ export const getKnightPossibleAttacks = (
     const twoOClock = from + 10;
     const fourOClock = from - 6;
     if (isValidSquare(twoOClock)) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === twoOClock) {
           moves.push({
             piece,
@@ -203,7 +203,7 @@ export const getKnightPossibleAttacks = (
       }
     }
     if (isValidSquare(fourOClock)) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === fourOClock) {
           moves.push({
             piece,
@@ -230,7 +230,7 @@ export const getKnightPossibleAttacks = (
     const sevenOClock = from - 17;
     const elevenOClock = from + 15;
     if (isValidSquare(sevenOClock)) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === sevenOClock) {
           moves.push({
             piece,
@@ -251,7 +251,7 @@ export const getKnightPossibleAttacks = (
       }
     }
     if (isValidSquare(elevenOClock)) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === elevenOClock) {
           moves.push({
             piece,
@@ -278,7 +278,7 @@ export const getKnightPossibleAttacks = (
     const eightOClock = from - 10;
     const tenOClock = from + 6;
     if (isValidSquare(eightOClock)) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === eightOClock) {
           moves.push({
             piece,
@@ -299,7 +299,7 @@ export const getKnightPossibleAttacks = (
       }
     }
     if (isValidSquare(tenOClock)) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === tenOClock) {
           moves.push({
             piece,

@@ -1,12 +1,20 @@
 import {
   BLACK_KING,
   BLACK_PAWN,
+  BLACK_ROOK,
   Piece,
   WHITE_KING,
   WHITE_PAWN,
+  WHITE_ROOK,
 } from "./pieces/utils.ts";
 import { State } from "./state.ts";
-import { Castling, EnPassant, Promotion, Square } from "./types.ts";
+import {
+  Castling,
+  EnPassant,
+  MoveCastling,
+  Promotion,
+  Square,
+} from "./types.ts";
 import { isSquareOnRank } from "./utils.ts";
 
 export interface Move {
@@ -16,7 +24,7 @@ export interface Move {
 
   to: Square;
 
-  castling: Castling;
+  castling: MoveCastling;
 
   promotion: Promotion;
 }
@@ -36,16 +44,47 @@ export const applyMove = (state: State, move: Move) => {
   state.board[move.from] = 0;
   state.board[move.to] = move.promotion ?? move.piece;
 
+  // en passant
   if (move.to === state.enPassant) {
     if (move.piece === WHITE_PAWN) {
       state.board[state.enPassant - 8] = 0;
       state.blackPositions[state.enPassant - 8] = 0;
     } else if (move.piece === BLACK_PAWN) {
       state.board[state.enPassant + 8] = 0;
-      state.whitePositions[state.enPassant + 1] = 0;
+      state.whitePositions[state.enPassant + 8] = 0;
     }
   }
 
+  // castling
+  if (move.castling) {
+    if (move.castling === "K") {
+      if (state.sideToMove === "w") {
+        state.board[7] = 0;
+        state.board[5] = WHITE_ROOK;
+        state.whitePositions[7] = 0;
+        state.whitePositions[5] = WHITE_ROOK;
+      } else {
+        state.board[63] = 0;
+        state.board[61] = BLACK_ROOK;
+        state.blackPositions[63] = 0;
+        state.blackPositions[61] = BLACK_ROOK;
+      }
+    } else {
+      if (state.sideToMove === "w") {
+        state.board[0] = 0;
+        state.board[3] = WHITE_ROOK;
+        state.whitePositions[0] = 0;
+        state.whitePositions[3] = WHITE_ROOK;
+      } else {
+        state.board[56] = 0;
+        state.board[59] = BLACK_ROOK;
+        state.blackPositions[56] = 0;
+        state.blackPositions[59] = BLACK_ROOK;
+      }
+    }
+  }
+
+  // update sides position
   if (state.sideToMove === "w") {
     state.whitePositions[move.from] = 0;
     state.whitePositions[move.to] = move.promotion ?? move.piece;
@@ -56,6 +95,7 @@ export const applyMove = (state: State, move: Move) => {
     state.whitePositions[move.to] = 0;
   }
 
+  // update king position
   if (move.piece === WHITE_KING) {
     state.kingPosition[0] = move.to;
   } else if (move.piece === BLACK_KING) {
@@ -64,6 +104,7 @@ export const applyMove = (state: State, move: Move) => {
 };
 
 export const applyEnPassant = (state: State, move: Move) => {
+  // store the latest enPassant square
   if (
     move.piece === WHITE_PAWN && isSquareOnRank(move.from, 1) &&
     move.to - move.from === 16
@@ -78,21 +119,41 @@ export const applyEnPassant = (state: State, move: Move) => {
 };
 
 export const applyMoveCount = (state: State) => {
-  state.halfMoveCount += 1;
   if (state.sideToMove === "b") {
     state.moveCount += 1;
   }
 };
 
-export const applyNonTakeMoveCount = (state: State, move: Move) => {
+export const applyHalfMoveCount = (state: State, move: Move) => {
   // if it's a take (the square of to has a piece) or it's an enPassant take, reset the count
   if (
     !!state.board[move.to] ||
-    (move.to === state.enPassant &&
-      (move.piece === WHITE_PAWN || move.piece === BLACK_PAWN))
+    (
+      move.to === state.enPassant &&
+      (move.piece === WHITE_PAWN || move.piece === BLACK_PAWN)
+    )
   ) {
-    state.nonTakeMoveCount = 0;
+    state.halfMoveCount = 0;
   } else {
-    state.nonTakeMoveCount += 1;
+    state.halfMoveCount += 1;
+  }
+};
+
+export const updateCastling = (state: State, move: Move) => {
+  const removeCastling = (castlingOptions: Castling[]) => {
+    state.castling = state.castling
+      ?.split("")
+      ?.filter((i) => !castlingOptions.includes(i as Castling))
+      ?.join("") as Castling;
+  };
+
+  if (move.piece === WHITE_KING) removeCastling(["K", "Q"]);
+  else if (move.piece === BLACK_KING) removeCastling(["k", "q"]);
+  else if (move.piece === WHITE_ROOK) {
+    if (move.from === 0) removeCastling(["Q"]);
+    if (move.from === 7) removeCastling(["K"]);
+  } else if (move.piece === BLACK_ROOK) {
+    if (move.from === 56) removeCastling(["q"]);
+    if (move.from === 63) removeCastling(["k"]);
   }
 };

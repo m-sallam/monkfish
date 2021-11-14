@@ -100,7 +100,7 @@ export const getSlidingAttacks = (
       }
 
       if (isValidSquare(position)) {
-        if (attackedSquare) {
+        if (typeof attackedSquare === "number") {
           if (attackedSquare === position) {
             moves.push({
               piece: piece as Piece,

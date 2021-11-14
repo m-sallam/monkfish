@@ -15,6 +15,8 @@ import {
   WHITE_ROOK,
 } from "./utils.ts";
 
+export let promotions = 0;
+
 export const getPawnMovesForBlack = (state: State, from: Square) => {
   const moves: Move[] = [];
 
@@ -25,6 +27,7 @@ export const getPawnMovesForBlack = (state: State, from: Square) => {
 
   if (isValidSquare(oneStepMove) && !state.board[oneStepMove]) {
     if (isSquareOnRank(oneStepMove, 0)) {
+      promotions += 4;
       ([BLACK_QUEEN, BLACK_KNIGHT, BLACK_ROOK, BLACK_BISHOP] as const).forEach(
         (piece) => {
           moves.push({
@@ -70,6 +73,7 @@ export const getPawnMovesForBlack = (state: State, from: Square) => {
       (pieceOnPosition > 0 || rightAttackMove === state.enPassant)
     ) {
       if (isSquareOnRank(rightAttackMove, 0)) {
+        promotions += 4;
         ([BLACK_QUEEN, BLACK_KNIGHT, BLACK_ROOK, BLACK_BISHOP] as const)
           .forEach((piece) => {
             moves.push({
@@ -101,6 +105,7 @@ export const getPawnMovesForBlack = (state: State, from: Square) => {
       (pieceOnPosition > 0 || leftAttackMove === state.enPassant)
     ) {
       if (isSquareOnRank(leftAttackMove, 0)) {
+        promotions += 4;
         ([BLACK_QUEEN, BLACK_KNIGHT, BLACK_ROOK, BLACK_BISHOP] as const)
           .forEach((piece) => {
             moves.push({
@@ -251,7 +256,7 @@ export const getPawnAttacksForBlack = (
       isValidSquare(rightAttackMove) &&
       (pieceOnPosition > 0 || rightAttackMove === state.enPassant)
     ) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === rightAttackMove) {
           moves.push({
             piece: BLACK_PAWN,
@@ -281,7 +286,7 @@ export const getPawnAttacksForBlack = (
       isValidSquare(leftAttackMove) &&
       (pieceOnPosition > 0 || leftAttackMove === state.enPassant)
     ) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === leftAttackMove) {
           moves.push({
             piece: BLACK_PAWN,
@@ -321,7 +326,7 @@ export const getPawnAttacksForWhite = (
       isValidSquare(leftAttackMove) &&
       (pieceOnPosition < 0 || leftAttackMove === state.enPassant)
     ) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === leftAttackMove) {
           moves.push({
             piece: WHITE_PAWN,
@@ -351,7 +356,7 @@ export const getPawnAttacksForWhite = (
       isValidSquare(rightAttackMove) &&
       (pieceOnPosition < 0 || rightAttackMove === state.enPassant)
     ) {
-      if (attackedSquare) {
+      if (typeof attackedSquare === "number") {
         if (attackedSquare === rightAttackMove) {
           moves.push({
             piece: WHITE_PAWN,

@@ -1,10 +1,15 @@
-import { Board, getEmptyBoard } from "./board.ts";
+import { Board, getEmptyBoard, populateColorsPositions } from "./board.ts";
 import { FenParseError } from "./error.ts";
 import {
+  BLACK_KING,
   EMPTY,
   pieceLettersToValueMap,
   pieceValueToLetterMap,
+  WHITE_KING,
 } from "./pieces/utils.ts";
+import { State } from "./state.ts";
+import { BoardPositionNotation, Castling, Color, Square } from "./types.ts";
+import { boardPositionNotationToSquare } from "./utils.ts";
 
 export const fenToBoard = (fenPositionPart: string) => {
   const board = getEmptyBoard();
@@ -96,4 +101,101 @@ export const boardToFen = (board: Board) => {
   }
 
   return ranks.reverse().join("/");
+};
+
+export const parseFen = (fen: string) => {
+  if (typeof fen !== "string") throw new FenParseError("FEN must be a string");
+  if (fen.split(" ").length !== 6) throw new FenParseError("missing FEN parts");
+
+  const [
+    positions,
+    sideToMove,
+    castling,
+    enPassant,
+    halfMoveCounter,
+    currentMoveNumber,
+  ] = fen.split(" ");
+
+  const positionRegex = /^([pnbrqkPNBRQK1-8]{1,8}\/?){8}\w+$/;
+  const noDoubleDigitsRegex = /\d+\d+/;
+  if (!positionRegex.test(positions)) {
+    throw new FenParseError("invalid position part");
+  }
+  if (noDoubleDigitsRegex.test(positions)) {
+    throw new FenParseError("invalid position part");
+  }
+
+  const sideToMoveRegex = /^b|w$/;
+  if (!sideToMoveRegex.test(sideToMove)) {
+    throw new FenParseError("invalid side to move");
+  }
+
+  const castlingRegex = /^-|K|Q|k|q\w+$/;
+  if (!castlingRegex.test(castling)) {
+    throw new FenParseError("invalid castling");
+  }
+
+  const enPassantRegex = /^-|[a-h][3-6]$/;
+  if (!enPassantRegex.test(enPassant)) {
+    throw new FenParseError("invalid en passant");
+  }
+
+  const halfMoveCounterRegex = /^\d+$/;
+  if (!halfMoveCounterRegex.test(halfMoveCounter)) {
+    throw new FenParseError("invalid half move count");
+  }
+
+  const currentMoveNumberRegex = /^\d+$/;
+  if (!currentMoveNumberRegex.test(currentMoveNumber)) {
+    throw new FenParseError("invalid move count");
+  }
+
+  return [
+    positions,
+    sideToMove,
+    castling,
+    enPassant,
+    halfMoveCounter,
+    currentMoveNumber,
+  ];
+};
+
+export const fenToState = (fen: string): State => {
+  const [
+    positionsPart,
+    sideToMovePart,
+    castlingPart,
+    enPassantPart,
+    halfMoveCounterPart,
+    currentMoveNumberPart,
+  ] = parseFen(fen);
+
+  const board = fenToBoard(positionsPart);
+  const { blackPositions, whitePositions } = populateColorsPositions(board);
+  const whiteKingPosition = board.findIndex((piece) =>
+    piece === WHITE_KING
+  ) as Square;
+  const blackKingPosition = board.findIndex((piece) =>
+    piece === BLACK_KING
+  ) as Square;
+
+  const castling = castlingPart === "-" ? null : castlingPart as Castling;
+  const sideToMove = sideToMovePart as Color;
+  const enPassant = enPassantPart === "-"
+    ? null
+    : boardPositionNotationToSquare(enPassantPart as BoardPositionNotation);
+  const halfMoveCount = Number(halfMoveCounterPart);
+  const moveCount = Number(currentMoveNumberPart);
+
+  return {
+    board,
+    blackPositions,
+    whitePositions,
+    kingPosition: [whiteKingPosition, blackKingPosition],
+    castling,
+    enPassant,
+    halfMoveCount,
+    moveCount,
+    sideToMove,
+  };
 };
