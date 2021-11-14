@@ -7,6 +7,7 @@ import {
   Move,
   updateCastling,
 } from "./move.ts";
+import { possibleMoves } from "./moves.ts";
 import { copyState, State } from "./state.ts";
 import { defaultFen, oppositeColor } from "./utils.ts";
 
@@ -25,6 +26,18 @@ export class Game {
 
   load(fen: string) {
     this.state = fenToState(fen);
+  }
+
+  isGameOver() {
+    const moves = possibleMoves(this);
+    if (!moves.length) return true;
+    if (this.state.halfMoveCount >= 50) return true;
+    // TODO: check for insufficient pieces
+    return false;
+  }
+
+  sideToMove() {
+    return this.state.sideToMove;
   }
 
   move(move: Move) {
