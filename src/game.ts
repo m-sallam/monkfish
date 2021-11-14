@@ -12,50 +12,54 @@ import { copyState, State } from "./state.ts";
 import { defaultFen, oppositeColor } from "./utils.ts";
 
 export class Game {
-  state: State;
+  #state: State;
 
   #history: State[] = [];
 
   constructor() {
-    this.state = fenToState(defaultFen);
+    this.#state = fenToState(defaultFen);
   }
 
   #save() {
-    this.#history.push(copyState(this.state));
+    this.#history.push(copyState(this.#state));
   }
 
   load(fen: string) {
-    this.state = fenToState(fen);
+    this.#state = fenToState(fen);
   }
 
   isGameOver() {
     const moves = possibleMoves(this);
     if (!moves.length) return true;
-    if (this.state.halfMoveCount >= 50) return true;
+    if (this.#state.halfMoveCount >= 50) return true;
     // TODO: check for insufficient pieces
     return false;
   }
 
   sideToMove() {
-    return this.state.sideToMove;
+    return this.#state.sideToMove;
+  }
+
+  state() {
+    return this.#state;
   }
 
   move(move: Move) {
     this.#save();
 
-    applyHalfMoveCount(this.state, move);
-    applyMoveCount(this.state);
-    updateCastling(this.state, move);
-    applyMove(this.state, move);
-    applyEnPassant(this.state, move);
+    applyHalfMoveCount(this.#state, move);
+    applyMoveCount(this.#state);
+    updateCastling(this.#state, move);
+    applyMove(this.#state, move);
+    applyEnPassant(this.#state, move);
 
-    this.state.sideToMove = oppositeColor(this.state.sideToMove);
+    this.#state.sideToMove = oppositeColor(this.#state.sideToMove);
   }
 
   undo() {
     const previous = this.#history.pop();
     if (previous) {
-      this.state = previous;
+      this.#state = previous;
     }
   }
 }

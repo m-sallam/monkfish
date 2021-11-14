@@ -38,7 +38,7 @@ import { State } from "./state.ts";
 import { Color, Square } from "./types.ts";
 
 export const possibleMoves = (game: Game) => {
-  const { state } = game;
+  const state = game.state();
   const isWhiteToMove = state.sideToMove === "w";
   const positions = isWhiteToMove ? state.whitePositions : state.blackPositions;
 
@@ -102,7 +102,7 @@ export const isInCheckAfterMove = (
   game: Game,
   move: Move,
 ) => {
-  const { state } = game;
+  const state = game.state();
 
   const isWhiteToMove = state.sideToMove === "w";
 
