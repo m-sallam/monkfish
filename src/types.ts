@@ -102,3 +102,8 @@ export type RankNotation = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8";
 export type BoardPositionNotation = `${FileNotation}${RankNotation}`;
 
 export type EnPassant = Square | null;
+
+export type BoardPositionNotationMove = {
+  from: BoardPositionNotation;
+  to: BoardPositionNotation;
+};

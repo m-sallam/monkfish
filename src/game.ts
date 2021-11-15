@@ -4,12 +4,18 @@ import {
   applyHalfMoveCount,
   applyMove,
   applyMoveCount,
+  boardPositionNotationMoveToMove,
   Move,
   updateCastling,
 } from "./move.ts";
 import { possibleMoves } from "./moves.ts";
 import { copyState, State } from "./state.ts";
-import { defaultFen, oppositeColor } from "./utils.ts";
+import { BoardPositionNotationMove } from "./types.ts";
+import {
+  defaultFen,
+  isBoardPositionNotationMove,
+  oppositeColor,
+} from "./utils.ts";
 
 export class Game {
   #state: State;
@@ -48,7 +54,7 @@ export class Game {
     return stateToFen(this.#state);
   }
 
-  move(move: Move) {
+  #move(move: Move) {
     this.#save();
 
     applyHalfMoveCount(this.#state, move);
@@ -58,6 +64,14 @@ export class Game {
     applyEnPassant(this.#state, move);
 
     this.#state.sideToMove = oppositeColor(this.#state.sideToMove);
+  }
+
+  move(move: Move | BoardPositionNotationMove) {
+    if (isBoardPositionNotationMove(move)) {
+      this.#move(boardPositionNotationMoveToMove(this, move));
+    } else {
+      this.#move(move);
+    }
   }
 
   undo() {

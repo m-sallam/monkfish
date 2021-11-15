@@ -1,3 +1,6 @@
+import { MoveError } from "./error.ts";
+import { Game } from "./game.ts";
+import { possibleMoves } from "./moves.ts";
 import {
   BLACK_KING,
   BLACK_PAWN,
@@ -9,13 +12,14 @@ import {
 } from "./pieces/utils.ts";
 import { State } from "./state.ts";
 import {
+  BoardPositionNotationMove,
   Castling,
   EnPassant,
   MoveCastling,
   Promotion,
   Square,
 } from "./types.ts";
-import { isSquareOnRank } from "./utils.ts";
+import { boardPositionNotationToSquare, isSquareOnRank } from "./utils.ts";
 
 export interface Move {
   piece: Piece;
@@ -164,4 +168,20 @@ export const updateCastling = (state: State, move: Move) => {
     if (move.to === 56) removeCastling(["q"]);
     if (move.to === 63) removeCastling(["k"]);
   }
+};
+
+export const boardPositionNotationMoveToMove = (
+  game: Game,
+  moveObject: BoardPositionNotationMove,
+): Move => {
+  const from = boardPositionNotationToSquare(moveObject.from);
+  const to = boardPositionNotationToSquare(moveObject.to);
+
+  if (!from || !to) throw new MoveError("invalid move");
+
+  const moves = possibleMoves(game);
+  const move = moves.find((m) => m.from === from && m.to === to);
+  if (!move) throw new MoveError("invalid move");
+
+  return move;
 };

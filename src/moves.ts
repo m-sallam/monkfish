@@ -122,16 +122,3 @@ export const isInCheckAfterMove = (
 
   return attacked;
 };
-
-export const possibleMovesForDepth = (game: Game, depth = 1): number => {
-  const moves = possibleMoves(game);
-  if (depth === 1) return moves.length;
-
-  const innerMoves = moves.reduce((acc, move) => {
-    game.move(move);
-    const num = acc + possibleMovesForDepth(game, depth - 1);
-    game.undo();
-    return num;
-  }, 0);
-  return innerMoves;
-};

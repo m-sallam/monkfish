@@ -1,7 +1,9 @@
 import { Board } from "./board.ts";
+import { Move } from "./move.ts";
 import { pieceValueToLetterMap } from "./pieces/utils.ts";
 import {
   BoardPositionNotation,
+  BoardPositionNotationMove,
   Color,
   File,
   FileNotation,
@@ -95,4 +97,10 @@ export const printBoard = (board: Board) => {
   console.log("    a  b  c  d  e  f  g  h");
   console.log("__________________________");
   console.log("                          ");
+};
+
+export const isBoardPositionNotationMove = (
+  m: Move | BoardPositionNotationMove,
+): m is BoardPositionNotationMove => {
+  return typeof m.from === "string";
 };
