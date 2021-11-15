@@ -36,6 +36,7 @@ import {
 import { getRookPossibleAttacks, getRookPossibleMoves } from "./pieces/rook.ts";
 import { State } from "./state.ts";
 import { Color, Square } from "./types.ts";
+import { isValidSquare } from "./utils.ts";
 
 export const possibleMoves = (game: Game) => {
   const state = game.state();
@@ -63,6 +64,38 @@ export const possibleMoves = (game: Game) => {
       }
     }
   });
+
+  return moves.filter((m) => !isInCheckAfterMove(game, m));
+};
+
+export const possibleMovesForSquare = (game: Game, square: Square) => {
+  if (!isValidSquare(square)) return [];
+
+  const state = game.state();
+  const isWhiteToMove = state.sideToMove === "w";
+  const piece = state.board[square];
+
+  if (!piece) return [];
+  if (piece > 0 && !isWhiteToMove) return [];
+  if (piece < 0 && isWhiteToMove) return [];
+
+  const moves: Move[] = [];
+
+  if (piece === WHITE_PAWN) {
+    moves.push(...getPawnMovesForWhite(state, square));
+  } else if (piece === BLACK_PAWN) {
+    moves.push(...getPawnMovesForBlack(state, square));
+  } else if (piece === WHITE_KNIGHT || piece === BLACK_KNIGHT) {
+    moves.push(...getKnightPossibleMoves(state, square));
+  } else if (piece === WHITE_BISHOP || piece === BLACK_BISHOP) {
+    moves.push(...getBishopPossibleMoves(state, square));
+  } else if (piece === WHITE_ROOK || piece === BLACK_ROOK) {
+    moves.push(...getRookPossibleMoves(state, square));
+  } else if (piece === WHITE_QUEEN || piece === BLACK_QUEEN) {
+    moves.push(...getQueenPossibleMoves(state, square));
+  } else if (piece === WHITE_KING || piece === BLACK_KING) {
+    moves.push(...getKingPossibleMoves(state, square));
+  }
 
   return moves.filter((m) => !isInCheckAfterMove(game, m));
 };

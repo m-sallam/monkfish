@@ -8,7 +8,7 @@ import {
   Move,
   updateCastling,
 } from "./move.ts";
-import { possibleMoves } from "./moves.ts";
+import { possibleMoves, possibleMovesForSquare } from "./moves.ts";
 import { Piece, pieceValueToLetterMap } from "./pieces/utils.ts";
 import { copyState, State } from "./state.ts";
 import {
@@ -70,6 +70,15 @@ export class Game {
 
     if (!piece) return null;
     return pieceValueToLetterMap[piece];
+  }
+
+  possibleMoves() {
+    return possibleMoves(this);
+  }
+
+  possibleMovesForPosition(position: BoardPositionNotation) {
+    const square = boardPositionNotationToSquare(position);
+    return possibleMovesForSquare(this, square);
   }
 
   #move(move: Move) {
