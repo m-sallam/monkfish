@@ -1,4 +1,4 @@
-import { fenToState } from "./fen.ts";
+import { fenToState, stateToFen } from "./fen.ts";
 import {
   applyEnPassant,
   applyHalfMoveCount,
@@ -42,6 +42,10 @@ export class Game {
 
   state() {
     return this.#state;
+  }
+
+  fen() {
+    return stateToFen(this.#state);
   }
 
   move(move: Move) {

@@ -9,7 +9,10 @@ import {
 } from "./pieces/utils.ts";
 import { State } from "./state.ts";
 import { BoardPositionNotation, Castling, Color, Square } from "./types.ts";
-import { boardPositionNotationToSquare } from "./utils.ts";
+import {
+  boardPositionNotationToSquare,
+  squareToBoardPositionNotation,
+} from "./utils.ts";
 
 export const fenToBoard = (fenPositionPart: string) => {
   const board = getEmptyBoard();
@@ -198,4 +201,17 @@ export const fenToState = (fen: string): State => {
     moveCount,
     sideToMove,
   };
+};
+
+export const stateToFen = (state: State): string => {
+  const positions = boardToFen(state.board);
+  const sideToMove = state.sideToMove;
+  const castling = state.castling || "-";
+  const enPassant = state.enPassant
+    ? squareToBoardPositionNotation(state.enPassant)
+    : "-";
+  const halfMoveCount = state.halfMoveCount;
+  const moveCount = state.moveCount;
+
+  return `${positions} ${sideToMove} ${castling} ${enPassant} ${halfMoveCount} ${moveCount}`;
 };

@@ -35,6 +35,11 @@ export const FileNotationToFile: Record<FileNotation, File> = {
   h: 7,
 };
 
+export const FileToFileNotation = Object
+  .fromEntries(
+    Object.entries(FileNotationToFile).map(([key, value]) => [value, key]),
+  );
+
 export const RankNotationToRank: Record<RankNotation, Rank> = {
   1: 0,
   2: 1,
@@ -46,6 +51,11 @@ export const RankNotationToRank: Record<RankNotation, Rank> = {
   8: 7,
 };
 
+export const RankToRankNotation = Object
+  .fromEntries(
+    Object.entries(RankNotationToRank).map(([key, value]) => [value, key]),
+  );
+
 export const boardPositionNotationToSquare = (
   position: BoardPositionNotation,
 ): Square => {
@@ -55,6 +65,15 @@ export const boardPositionNotationToSquare = (
   const square = ((rank * 8) + file) as Square;
 
   return square;
+};
+
+export const squareToBoardPositionNotation = (
+  square: Square,
+): string => {
+  const file = (square % 8) as File;
+  const rank = Math.floor(square / 8) as Rank;
+
+  return `${FileToFileNotation[file]}${RankToRankNotation[rank]}`;
 };
 
 export const printBoard = (board: Board) => {
