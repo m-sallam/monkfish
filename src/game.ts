@@ -9,9 +9,15 @@ import {
   updateCastling,
 } from "./move.ts";
 import { possibleMoves } from "./moves.ts";
+import { Piece, pieceValueToLetterMap } from "./pieces/utils.ts";
 import { copyState, State } from "./state.ts";
-import { BoardPositionNotationMove } from "./types.ts";
 import {
+  BoardPositionNotation,
+  BoardPositionNotationMove,
+  Square,
+} from "./types.ts";
+import {
+  boardPositionNotationToSquare,
   defaultFen,
   isBoardPositionNotationMove,
   oppositeColor,
@@ -52,6 +58,18 @@ export class Game {
 
   fen() {
     return stateToFen(this.#state);
+  }
+
+  pieceOnSquare(square: Square | BoardPositionNotation) {
+    let piece: Piece | 0;
+    if (typeof square === "string") {
+      piece = this.#state.board[boardPositionNotationToSquare(square)];
+    } else {
+      piece = this.#state.board[square];
+    }
+
+    if (!piece) return null;
+    return pieceValueToLetterMap[piece];
   }
 
   #move(move: Move) {
