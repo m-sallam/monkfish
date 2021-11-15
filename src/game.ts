@@ -68,7 +68,8 @@ export class Game {
 
   move(move: Move | BoardPositionNotationMove) {
     if (isBoardPositionNotationMove(move)) {
-      this.#move(boardPositionNotationMoveToMove(this, move));
+      const moves = possibleMoves(this);
+      this.#move(boardPositionNotationMoveToMove(moves, move));
     } else {
       this.#move(move);
     }

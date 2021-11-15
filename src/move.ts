@@ -1,6 +1,4 @@
 import { MoveError } from "./error.ts";
-import { Game } from "./game.ts";
-import { possibleMoves } from "./moves.ts";
 import {
   BLACK_KING,
   BLACK_PAWN,
@@ -171,7 +169,7 @@ export const updateCastling = (state: State, move: Move) => {
 };
 
 export const boardPositionNotationMoveToMove = (
-  game: Game,
+  possibleMoves: Move[],
   moveObject: BoardPositionNotationMove,
 ): Move => {
   const from = boardPositionNotationToSquare(moveObject.from);
@@ -179,8 +177,7 @@ export const boardPositionNotationMoveToMove = (
 
   if (!from || !to) throw new MoveError("invalid move");
 
-  const moves = possibleMoves(game);
-  const move = moves.find((m) => m.from === from && m.to === to);
+  const move = possibleMoves.find((m) => m.from === from && m.to === to);
   if (!move) throw new MoveError("invalid move");
 
   return move;
