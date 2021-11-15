@@ -17,7 +17,11 @@ import {
   Promotion,
   Square,
 } from "./types.ts";
-import { boardPositionNotationToSquare, isSquareOnRank } from "./utils.ts";
+import {
+  boardPositionNotationToSquare,
+  isSquareOnRank,
+  isValidSquare,
+} from "./utils.ts";
 
 export interface Move {
   piece: Piece;
@@ -175,7 +179,9 @@ export const boardPositionNotationMoveToMove = (
   const from = boardPositionNotationToSquare(moveObject.from);
   const to = boardPositionNotationToSquare(moveObject.to);
 
-  if (!from || !to) throw new MoveError("invalid move");
+  if (!isValidSquare(from) || !isValidSquare(to)) {
+    throw new MoveError("invalid move");
+  }
 
   const move = possibleMoves.find((m) => m.from === from && m.to === to);
   if (!move) throw new MoveError("invalid move");
