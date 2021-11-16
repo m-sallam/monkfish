@@ -1,4 +1,5 @@
 import { MoveError } from "./error.ts";
+import { pieceLettersToValueMap } from "./pieces/utils.ts";
 import {
   BLACK_KING,
   BLACK_PAWN,
@@ -178,12 +179,17 @@ export const boardPositionNotationMoveToMove = (
 ): Move => {
   const from = boardPositionNotationToSquare(moveObject.from);
   const to = boardPositionNotationToSquare(moveObject.to);
+  const promotion = moveObject.promotion
+    ? pieceLettersToValueMap[moveObject.promotion]
+    : null;
 
   if (!isValidSquare(from) || !isValidSquare(to)) {
     throw new MoveError("invalid move");
   }
 
-  const move = possibleMoves.find((m) => m.from === from && m.to === to);
+  const move = possibleMoves.find((m) =>
+    m.from === from && m.to === to && m.promotion === promotion
+  );
   if (!move) throw new MoveError("invalid move");
 
   return move;
