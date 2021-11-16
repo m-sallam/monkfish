@@ -2,12 +2,12 @@ import { Board } from "./board.ts";
 import { Move } from "./move.ts";
 import { pieceValueToLetterMap } from "./pieces/utils.ts";
 import {
+  BoardFile,
   BoardPositionNotation,
   BoardPositionNotationMove,
+  BoardRank,
   Color,
-  File,
   FileNotation,
-  Rank,
   RankNotation,
   Square,
 } from "./types.ts";
@@ -17,16 +17,16 @@ export const defaultFen =
 
 export const oppositeColor = (color: Color) => color === "w" ? "b" : "w";
 
-export const isSquareOnRank = (square: Square, rank: Rank) =>
+export const isSquareOnRank = (square: Square, rank: BoardRank) =>
   Math.floor(square / 8) === rank;
 
-export const isSquareOnFile = (square: Square, file: File) =>
+export const isSquareOnFile = (square: Square, file: BoardFile) =>
   square % 8 === file;
 
 export const isValidSquare = (square: number): square is Square =>
   square >= 0 && square <= 63;
 
-export const FileNotationToFile: Record<FileNotation, File> = {
+export const FileNotationToFile: Record<FileNotation, BoardFile> = {
   a: 0,
   b: 1,
   c: 2,
@@ -42,7 +42,7 @@ export const FileToFileNotation = Object
     Object.entries(FileNotationToFile).map(([key, value]) => [value, key]),
   );
 
-export const RankNotationToRank: Record<RankNotation, Rank> = {
+export const RankNotationToRank: Record<RankNotation, BoardRank> = {
   1: 0,
   2: 1,
   3: 2,
@@ -72,8 +72,8 @@ export const boardPositionNotationToSquare = (
 export const squareToBoardPositionNotation = (
   square: Square,
 ): string => {
-  const file = (square % 8) as File;
-  const rank = Math.floor(square / 8) as Rank;
+  const file = (square % 8) as BoardFile;
+  const rank = Math.floor(square / 8) as BoardRank;
 
   return `${FileToFileNotation[file]}${RankToRankNotation[rank]}`;
 };

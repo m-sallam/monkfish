@@ -1,5 +1,5 @@
 import { assertEquals } from "../dev_deps.ts";
-import { Color, File, Rank, Square } from "../src/types.ts";
+import { BoardFile, BoardRank, Color, Square } from "../src/types.ts";
 import { isSquareOnFile, isSquareOnRank, oppositeColor } from "../src/utils.ts";
 
 const oppositeColorCases = [
@@ -82,7 +82,10 @@ isSquareOnRankCases.forEach(({ name, square, rank, returned }) => {
   Deno.test({
     name: `isSquareOnRank: ${name}`,
     fn: () => {
-      assertEquals(returned, isSquareOnRank(square as Square, rank as Rank));
+      assertEquals(
+        returned,
+        isSquareOnRank(square as Square, rank as BoardRank),
+      );
     },
   });
 });
@@ -91,7 +94,10 @@ isSquareOnFileCases.forEach(({ name, square, file, returned }) => {
   Deno.test({
     name: `isSquareOnFile: ${name}`,
     fn: () => {
-      assertEquals(returned, isSquareOnFile(square as Square, file as File));
+      assertEquals(
+        returned,
+        isSquareOnFile(square as Square, file as BoardFile),
+      );
     },
   });
 });

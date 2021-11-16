@@ -93,10 +93,10 @@ export type Promotion =
   | typeof WHITE_BISHOP
   | null;
 
-export type File = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type BoardFile = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type FileNotation = "a" | "b" | "c" | "d" | "e" | "f" | "g" | "h";
 
-export type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
+export type BoardRank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type RankNotation = "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8";
 
 export type BoardPositionNotation = `${FileNotation}${RankNotation}`;

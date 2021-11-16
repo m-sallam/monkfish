@@ -36,7 +36,7 @@ const cases = [
   },
   {
     name: "position 1 depth 5",
-    depth: 4,
+    depth: 5,
     fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
     nodes: 4_865_609,
     ignore: true,
