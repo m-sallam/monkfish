@@ -8,7 +8,7 @@ Demo: https://monkfish.deno.dev/
 
 TODO:
 
-- threefold draw
+- threefold repetition draw
 - missing tests
 - algebraic notation moves
 - AI
