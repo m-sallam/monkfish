@@ -8,7 +8,6 @@ Demo: https://monkfish.deno.dev/
 
 TODO:
 
-- insufficient pieces check
 - game state
 - missing tests
 - algebraic notation moves
