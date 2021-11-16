@@ -1,15 +1,11 @@
-name: NPM Build Check
+name: NPM Build and Publish
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches: 
-      - main
+  release:
+    types: [created]
 
 jobs:
-  build:
+  buildAndPublish:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -26,3 +22,10 @@ jobs:
         registry-url: 'https://registry.npmjs.org'
     - name: npm build
       run: deno run -A ./scripts/build_npm.ts ${{steps.get_tag_version.outputs.TAG_VERSION}}
+    - name: npm publish
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      run: |
+        cd npm
+        npm publish
+
