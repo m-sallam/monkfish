@@ -70,6 +70,26 @@ export class Game {
     return attacked;
   }
 
+  status() {
+    const moves = possibleMoves(this);
+    const fiftyRuleDraw = this.#state.halfMoveCount >= 50;
+    const insufficientPieces = hasInsufficientPieces(this.#state);
+    const inCheck = this.isInCheck();
+
+    if (moves.length && !fiftyRuleDraw && !insufficientPieces) {
+      return "playing";
+    }
+
+    if (!moves.length) {
+      const oppositeColor = this.#state.sideToMove === "w" ? "black" : "white";
+      if (inCheck) return `${oppositeColor} won by checkmate`;
+      else return `draw by stalemate`;
+    }
+
+    if (fiftyRuleDraw) return `draw by fifty rule`;
+    if (insufficientPieces) return `draw by insufficient pieces`;
+  }
+
   sideToMove() {
     return this.#state.sideToMove;
   }
