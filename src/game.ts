@@ -8,7 +8,11 @@ import {
   Move,
   updateCastling,
 } from "./move.ts";
-import { possibleMoves, possibleMovesForSquare } from "./moves.ts";
+import {
+  hasInsufficientPieces,
+  possibleMoves,
+  possibleMovesForSquare,
+} from "./moves.ts";
 import { Piece, pieceValueToLetterMap } from "./pieces/utils.ts";
 import { copyState, State } from "./state.ts";
 import {
@@ -44,7 +48,7 @@ export class Game {
     const moves = possibleMoves(this);
     if (!moves.length) return true;
     if (this.#state.halfMoveCount >= 50) return true;
-    // TODO: check for insufficient pieces
+    if (hasInsufficientPieces(this.#state)) return true;
     return false;
   }
 

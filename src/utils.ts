@@ -104,3 +104,15 @@ export const isBoardPositionNotationMove = (
 ): m is BoardPositionNotationMove => {
   return typeof m.from === "string";
 };
+
+export const colorOfSquare = (square: Square): Color => {
+  const rank = Math.floor(square / 8);
+  const file = square % 8;
+
+  const isEventRank = rank % 2 === 0;
+  const isEvenFile = file % 2 === 0;
+  const bothEvenOrOdd = isEventRank === isEvenFile;
+
+  if (bothEvenOrOdd) return "b";
+  else return "w";
+};

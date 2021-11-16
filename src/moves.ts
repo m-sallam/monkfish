@@ -37,6 +37,8 @@ import { getRookPossibleAttacks, getRookPossibleMoves } from "./pieces/rook.ts";
 import { State } from "./state.ts";
 import { Color, Square } from "./types.ts";
 import { isValidSquare } from "./utils.ts";
+import { Piece } from "./pieces/utils.ts";
+import { colorOfSquare } from "./utils.ts";
 
 export const possibleMoves = (game: Game) => {
   const state = game.state();
@@ -154,4 +156,50 @@ export const isInCheckAfterMove = (
   game.undo();
 
   return attacked;
+};
+
+export const hasInsufficientPieces = (state: State) => {
+  const { whitePositions, blackPositions } = state;
+
+  const whitePieces = whitePositions.filter((p: Piece | 0) => p > 1);
+  const blackPieces = blackPositions.filter((p: Piece | 0) => p < 1);
+
+  const whiteHasKingOnly = whitePieces.length === 1;
+  const blackHasKingOnly = blackPieces.length === 1;
+  if (whiteHasKingOnly && blackHasKingOnly) return true;
+
+  const whiteHas2Pieces = whitePieces.length === 2;
+  const blackHas2Pieces = blackPieces.length === 2;
+  if (
+    (!whiteHasKingOnly && !whiteHas2Pieces) ||
+    (!blackHasKingOnly && !blackHas2Pieces)
+  ) {
+    return false;
+  }
+
+  const whiteSecondPiece = whitePieces.find((p) => p !== WHITE_KING);
+  const blackSecondPiece = blackPieces.find((p) => p !== BLACK_KING);
+
+  if (whiteHasKingOnly) {
+    if (blackSecondPiece === BLACK_BISHOP) return true;
+    if (blackSecondPiece === BLACK_KNIGHT) return true;
+    return false;
+  }
+
+  if (blackHasKingOnly) {
+    if (whiteSecondPiece === WHITE_BISHOP) return true;
+    if (whiteSecondPiece === WHITE_KNIGHT) return true;
+    return false;
+  }
+
+  if (whiteSecondPiece === WHITE_BISHOP && blackSecondPiece === BLACK_BISHOP) {
+    if (
+      colorOfSquare(state.board.indexOf(whiteSecondPiece) as Square) ===
+        colorOfSquare(state.board.indexOf(blackSecondPiece) as Square)
+    ) {
+      return true;
+    }
+  }
+
+  return false;
 };
