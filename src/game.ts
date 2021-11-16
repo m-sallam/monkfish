@@ -10,6 +10,7 @@ import {
 } from "./move.ts";
 import {
   hasInsufficientPieces,
+  isColorAttackingSquare,
   possibleMoves,
   possibleMovesForSquare,
 } from "./moves.ts";
@@ -50,6 +51,22 @@ export class Game {
     if (this.#state.halfMoveCount >= 50) return true;
     if (hasInsufficientPieces(this.#state)) return true;
     return false;
+  }
+
+  isInCheck() {
+    const isWhiteToMove = this.#state.sideToMove === "w";
+
+    const kingPosition = isWhiteToMove
+      ? this.#state.kingPosition[0]
+      : this.#state.kingPosition[1];
+
+    const attacked = isColorAttackingSquare(
+      isWhiteToMove ? "b" : "w",
+      this.#state,
+      kingPosition,
+    );
+
+    return attacked;
   }
 
   sideToMove() {
