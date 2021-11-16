@@ -34,8 +34,8 @@ export class Game {
 
   #history: State[] = [];
 
-  constructor() {
-    this.#state = fenToState(defaultFen);
+  constructor(fen?: string) {
+    this.#state = fenToState(fen ?? defaultFen);
   }
 
   #save() {
