@@ -26,6 +26,7 @@ import {
   defaultFen,
   isBoardPositionNotationMove,
   oppositeColor,
+  squareToBoardPositionNotation,
 } from "./utils.ts";
 
 export class Game {
@@ -94,7 +95,13 @@ export class Game {
   }
 
   possibleMoves() {
-    return possibleMoves(this);
+    return possibleMoves(this).map((move) => ({
+      from: squareToBoardPositionNotation(move.from),
+      to: squareToBoardPositionNotation(move.to),
+      promotion: move.promotion ? pieceValueToLetterMap[move.promotion] : null,
+      piece: pieceValueToLetterMap[move.piece],
+      castling: move.castling,
+    }));
   }
 
   possibleMovesForPosition(position: BoardPositionNotation) {
