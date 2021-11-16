@@ -8,7 +8,7 @@ Demo: https://monkfish.deno.dev/
 
 TODO:
 
-- game state
+- threefold draw
 - missing tests
 - algebraic notation moves
 - AI
