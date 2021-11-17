@@ -121,4 +121,5 @@ export type BoardPositionNotationMove = {
   from: BoardPositionNotation;
   to: BoardPositionNotation;
   promotion?: PieceLetter | null;
+  piece: PieceLetter;
 };
