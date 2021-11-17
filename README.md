@@ -2,7 +2,7 @@
 
 a chess engine in typescript for Deno.
 
-Demo: https://monkfish.deno.dev/
+Demo: https://monkfish-demo.vercel.app/
 
 **Still a work in progress**
 
