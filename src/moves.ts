@@ -161,8 +161,8 @@ export const isInCheckAfterMove = (
 export const hasInsufficientPieces = (state: State) => {
   const { whitePositions, blackPositions } = state;
 
-  const whitePieces = whitePositions.filter((p: Piece | 0) => p > 1);
-  const blackPieces = blackPositions.filter((p: Piece | 0) => p < 1);
+  const whitePieces = whitePositions.filter((p: Piece | 0) => p > 0);
+  const blackPieces = blackPositions.filter((p: Piece | 0) => p < 0);
 
   const whiteHasKingOnly = whitePieces.length === 1;
   const blackHasKingOnly = blackPieces.length === 1;
