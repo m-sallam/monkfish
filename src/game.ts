@@ -126,7 +126,13 @@ export class Game {
 
   possibleMovesForPosition(position: BoardPositionNotation) {
     const square = boardPositionNotationToSquare(position);
-    return possibleMovesForSquare(this, square);
+    return possibleMovesForSquare(this, square).map((move) => ({
+      from: squareToBoardPositionNotation(move.from),
+      to: squareToBoardPositionNotation(move.to),
+      promotion: move.promotion ? pieceValueToLetterMap[move.promotion] : null,
+      piece: pieceValueToLetterMap[move.piece],
+      castling: move.castling,
+    }));
   }
 
   #move(move: Move) {
