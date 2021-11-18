@@ -1,3 +1,4 @@
+import { getBestMove } from "./ai/beginner.ts";
 import { fenToState, stateToFen } from "./fen.ts";
 import {
   applyEnPassant,
@@ -122,6 +123,18 @@ export class Game {
       piece: pieceValueToLetterMap[move.piece],
       castling: move.castling,
     }));
+  }
+
+  bestMove(depth = 5) {
+    const { move } = getBestMove(this, depth);
+    if (!move) return null;
+    return {
+      from: squareToBoardPositionNotation(move.from),
+      to: squareToBoardPositionNotation(move.to),
+      promotion: move.promotion ? pieceValueToLetterMap[move.promotion] : null,
+      piece: pieceValueToLetterMap[move.piece],
+      castling: move.castling,
+    };
   }
 
   possibleMovesForPosition(position: BoardPositionNotation) {
