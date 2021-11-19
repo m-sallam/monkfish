@@ -1,4 +1,4 @@
-import { getBestMove } from "./ai/beginner.ts";
+import { getBestMove } from "./ai/minmax.ts";
 import { fenToState, stateToFen } from "./fen.ts";
 import {
   applyEnPassant,
