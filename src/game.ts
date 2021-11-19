@@ -125,7 +125,7 @@ export class Game {
     }));
   }
 
-  bestMove(depth = 5) {
+  bestMove(depth = 6) {
     const { move } = getBestMove(this, depth);
     if (!move) return null;
     return {
