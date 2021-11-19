@@ -34,7 +34,7 @@ game.move(aiMove)
 
 ## for Deno
 ```
-import { Game } from 'https://deno.land/x/monkfish@0.1.11/mod.ts'
+import { Game } from 'https://deno.land/x/monkfish@0.1.15/mod.ts'
 
 const game = new Game()
 ```
@@ -83,7 +83,7 @@ game.fen() // "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"
   game.isGameOver() // true
 ```
 
-### `isInCheck(): boolean`
+### `.isInCheck(): boolean`
 
 ```
  const game = new Game('r1bqkbnr/pppppQ2/2n3p1/7p/2B1P3/8/PPPP1PPP/RNB1K1NR b kq - 0 1')
