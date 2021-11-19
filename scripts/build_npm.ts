@@ -17,6 +17,7 @@ await build({
     bugs: {
       url: "https://github.com/m-sallam/monkfish/issues",
     },
+    keywords: ["chess", "engine", "typescript"],
   },
 });
 
