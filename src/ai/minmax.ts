@@ -16,7 +16,10 @@ export const getBestMove = (
   const moves = possibleMoves(game);
   if (!moves.length) {
     if (game.isInCheck()) {
-      return { move: null, score: isAISide ? -(10 ** 10) : 10 ** 10 };
+      return {
+        move: null,
+        score: isAISide ? -(10 ** 10) * depth : (10 ** 10) * depth,
+      };
     }
     return { move: null, score };
   }
