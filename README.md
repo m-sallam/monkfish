@@ -34,7 +34,7 @@ game.move(aiMove)
 
 ## for Deno
 ```
-import { Game } from 'https://deno.land/x/monkfish@0.1.16/mod.ts'
+import { Game } from 'https://deno.land/x/monkfish@0.1.17/mod.ts'
 
 const game = new Game()
 ```
