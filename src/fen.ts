@@ -133,7 +133,7 @@ export const parseFen = (fen: string) => {
     throw new FenParseError("invalid side to move");
   }
 
-  const castlingRegex = /^-|K|Q|k|q\w+$/;
+  const castlingRegex = /^(-|K|Q|k|q)+$/;
   if (!castlingRegex.test(castling)) {
     throw new FenParseError("invalid castling");
   }
