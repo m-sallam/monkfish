@@ -35,6 +35,8 @@ export class Game {
 
   #history: State[] = [];
 
+  #claimedDraw = false;
+
   constructor(fen?: string) {
     this.#state = fenToState(fen ?? defaultFen);
   }
@@ -52,6 +54,8 @@ export class Game {
     if (!moves.length) return true;
     if (this.#state.halfMoveCount >= 50) return true;
     if (hasInsufficientPieces(this.#state)) return true;
+    if (this.#claimedDraw && !this.isThreefoldRepetition()) return true;
+    if (this.isFivefoldRepetition()) return true;
     return false;
   }
 
@@ -71,11 +75,61 @@ export class Game {
     return attacked;
   }
 
+  isThreefoldRepetition() {
+    // threefold repetition cannot happen until the 10th move
+    if (this.#history.length < 10) return false;
+
+    if (
+      !this.#state.board.every((p, i) =>
+        this.#history[this.#history.length - 4].board[i] === p
+      )
+    ) {
+      return false;
+    }
+
+    if (
+      !this.#state.board.every((p, i) =>
+        this.#history[this.#history.length - 8].board[i] === p
+      )
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
+  isFivefoldRepetition() {
+    // fivefold repetition cannot happen until the 18th move
+    if (this.#history.length < 18) return false;
+
+    if (!this.isThreefoldRepetition()) return false;
+
+    if (
+      !this.#state.board.every((p, i) =>
+        this.#history[this.#history.length - 12].board[i] === p
+      )
+    ) {
+      return false;
+    }
+
+    if (
+      !this.#state.board.every((p, i) =>
+        this.#history[this.#history.length - 16].board[i] === p
+      )
+    ) {
+      return false;
+    }
+
+    return true;
+  }
+
   status() {
     const moves = possibleMoves(this);
     const fiftyRuleDraw = this.#state.halfMoveCount >= 50;
     const insufficientPieces = hasInsufficientPieces(this.#state);
     const inCheck = this.isInCheck();
+    const isThreefoldRepetition = this.isThreefoldRepetition();
+    const isFivefoldRepetition = this.isFivefoldRepetition();
 
     if (moves.length && !fiftyRuleDraw && !insufficientPieces) {
       return "playing";
@@ -89,6 +143,10 @@ export class Game {
 
     if (fiftyRuleDraw) return `draw by fifty rule`;
     if (insufficientPieces) return `draw by insufficient pieces`;
+    if (isThreefoldRepetition && this.#claimedDraw) {
+      return `draw by threefold repetition`;
+    }
+    if (isFivefoldRepetition) return `draw by fivefold repetition`;
   }
 
   sideToMove() {
@@ -101,6 +159,14 @@ export class Game {
 
   fen() {
     return stateToFen(this.#state);
+  }
+
+  claimDraw() {
+    if (this.isThreefoldRepetition()) {
+      this.#claimedDraw = true;
+      return true;
+    }
+    return false;
   }
 
   pieceOnSquare(square: Square | BoardPositionNotation) {
